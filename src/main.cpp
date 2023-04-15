@@ -127,6 +127,20 @@ int main(int argc, char * argv[]){
         for (auto controller: Gamepads){
             count += 1;
             if (show_controller[count-1]){
+                struct A {
+                  static void addBoolButton(char const* text, bool isActive) {
+                    const ImVec4 pressed = ImVec4(0.0, 1.0, 0.0, 1.0);
+                    if(isActive){
+                      ImGui::TextColored(pressed, text);
+                    }
+                    else {
+                      ImGui::Text(text);
+                    }
+                    ImGui::SameLine();
+                  }
+                };
+
+                
                 ImGui::Begin((controller->getName()+": #" + std::to_string(count)).c_str());
                 ImVec4 pressed = ImVec4(0.0, 1.0, 0.0, 1.0);
 
@@ -187,80 +201,39 @@ int main(int argc, char * argv[]){
                 // Print the face buttons, and color them if pressed.
                 // Using the class, to query buttons you check the state struct.
                 ImGui::TextColored(color, "Face Buttons");
-                if (controller->state.A){
-                    ImGui::TextColored(pressed, "Button A");
-                }else {ImGui::Text("Button A");}
-
-                if (controller->state.B){
-                    ImGui::TextColored(pressed, "Button B");
-                }else {ImGui::Text("Button B");}
-
-                if (controller->state.X){
-                    ImGui::TextColored(pressed, "Button X");
-                }else {ImGui::Text("Button X");}
-
-                if (controller->state.Y){
-                    ImGui::TextColored(pressed, "Button Y");
-                }else {ImGui::Text("Button Y");}
+                A::addBoolButton("Button A", controller->state.A);
+                A::addBoolButton("Button B", controller->state.B);
+                A::addBoolButton("Button X", controller->state.X);
+                A::addBoolButton("Button Y", controller->state.Y);
 
 
                 ImGui::NewLine();
                 // Print the DPad Buttons, and color them if they are pressed.   
                 // Using the class, to query buttons you check the state struct.
                 ImGui::TextColored(color, "DPAD Buttons");
-                if (controller->state.DPadUp){
-                    ImGui::TextColored(pressed, "Up");
-                }else {ImGui::Text("Up");}
-
-                if (controller->state.DPadDown){
-                    ImGui::TextColored(pressed, "Down");
-                }else {ImGui::Text("Down");}
-
-                if (controller->state.DPadLeft){
-                    ImGui::TextColored(pressed, "Left");
-                }else {ImGui::Text("Left");}
-
-                if (controller->state.DPadRight){
-                    ImGui::TextColored(pressed, "Right");
-                }else {ImGui::Text("Right");}
+                A::addBoolButton("Up", controller->state.DPadUp);
+                A::addBoolButton("Down", controller->state.DPadDown);
+                A::addBoolButton("Left", controller->state.DPadLeft);
+                A::addBoolButton("Right", controller->state.DPadRight);
 
 
                 ImGui::NewLine();
                 // Print the DPad Buttons, and color them if they are pressed.   
                 // Using the class, to query buttons you check the state struct.
                 ImGui::TextColored(color, "Shoulder Buttons and Stick Clicks");
-                if (controller->state.LeftShoulder){
-                    ImGui::TextColored(pressed, "Left Shoulder");
-                }else {ImGui::Text("Left Shoulder");}
-
-                if (controller->state.RightShoulder){
-                    ImGui::TextColored(pressed, "Right Shoulder");
-                }else {ImGui::Text("Right Shoulder");}
-
-                if (controller->state.LeftStickClick){
-                    ImGui::TextColored(pressed, "Left Stick");
-                }else {ImGui::Text("Left Stick");}
-
-                if (controller->state.RightStickClick){
-                    ImGui::TextColored(pressed, "Right Stick");
-                }else {ImGui::Text("Right Stick");}
+                A::addBoolButton("Left Shoulder", controller->state.LeftShoulder);
+                A::addBoolButton("Right Shoulder", controller->state.RightShoulder);
+                A::addBoolButton("Left Stick", controller->state.LeftStickClick);
+                A::addBoolButton("Right Stick", controller->state.RightStickClick);
 
 
                 ImGui::NewLine();
                 // Print the DPad Buttons, and color them if they are pressed.   
                 // Using the class, to query buttons you check the state struct.
                 ImGui::TextColored(color, "Start, Back, Guide");
-                if (controller->state.Start){
-                    ImGui::TextColored(pressed, "Start");
-                }else {ImGui::Text("Start");}
-
-                if (controller->state.Back){
-                    ImGui::TextColored(pressed, "Back");
-                }else {ImGui::Text("Back");}
-
-                if (controller->state.Guide){
-                    ImGui::TextColored(pressed, "Guide");
-                }else {ImGui::Text("Guide");}
+                A::addBoolButton("Start", controller->state.Start);
+                A::addBoolButton("Back", controller->state.Back);
+                A::addBoolButton("Guide", controller->state.Guide);
 
 
                 ImGui::NewLine();
@@ -296,33 +269,17 @@ int main(int argc, char * argv[]){
                 ImGui::NewLine();
                 // Print the Paddle Buttons
                 ImGui::TextColored(color, "Paddle Buttons");
-                if (controller->state.Paddle1){
-                    ImGui::TextColored(pressed, "Paddle1");
-                }else {ImGui::Text("Paddle1");}
-
-                if (controller->state.Paddle2){
-                    ImGui::TextColored(pressed, "Paddle2");
-                }else {ImGui::Text("Paddle2");}
-
-                if (controller->state.Paddle3){
-                    ImGui::TextColored(pressed, "Paddle3");
-                }else {ImGui::Text("Paddle3");}
-
-                if (controller->state.Paddle4){
-                    ImGui::TextColored(pressed, "Paddle4");
-                }else {ImGui::Text("Paddle4");}
+                A::addBoolButton("Paddle1", controller->state.Paddle1);
+                A::addBoolButton("Paddle2", controller->state.Paddle2);
+                A::addBoolButton("Paddle3", controller->state.Paddle3);
+                A::addBoolButton("Paddle4", controller->state.Paddle4);
 
 
                 ImGui::NewLine();
                 // Print the Touchpad, and Misc button (Capture, Mic, and Share button respectively)
                 ImGui::TextColored(color, "Touchpad and Misc");
-                if (controller->state.Touchpad){
-                    ImGui::TextColored(pressed, "Touchpad");
-                }else {ImGui::Text("Touchpad");}
-
-                if (controller->state.Misc){
-                    ImGui::TextColored(pressed, "Misc");
-                }else {ImGui::Text("Misc");}
+                A::addBoolButton("Touchpad", controller->state.Touchpad);
+                A::addBoolButton("Misc", controller->state.Misc);
 
 
                 ImGui::NewLine();
