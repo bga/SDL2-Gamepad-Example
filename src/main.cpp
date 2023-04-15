@@ -1,3 +1,8 @@
+#ifdef _WIN32
+  #define WIN32_LEAN_AND_MEAN
+  #include <windows.h>
+#endif
+
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl_renderer.h"
 #include "imgui/imgui_impl_sdl.h"
@@ -5,7 +10,17 @@
 #include "sdl_gamepad.h"
 void ImGUIStyle();
 
+#ifdef _WIN32
+int CALLBACK WinMain(
+  HINSTANCE   hInstance,
+  HINSTANCE   hPrevInstance,
+  LPSTR       lpCmdLine,
+  int         nCmdShow
+  ) {
+    int argc = 0; char* argv[0];
+#else
 int main(int argc, char * argv[]){
+#endif
     //for the sake of this example application, i'm going to initialize SDL2's controller,
     // haptics, and sensor subsystem separately from the main subsystems, as it it's a DLL
 
