@@ -104,7 +104,7 @@ int main(int argc, char * argv[]){
     ImGui_ImplSDL2_InitForOpenGL(window, NULL);
     ImGui_ImplSDLRenderer_Init(renderer);
     int count = 0;
-    int show_controller[8] {0,0,0,0,0,0,0,0};
+    int show_controller[8] {true, true, true, true, true, true, true, true};
     ImGuiID child_id = 0;
 
     MinMax<float> leftStickX;
