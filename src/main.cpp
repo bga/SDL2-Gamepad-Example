@@ -9,6 +9,43 @@
 
 #include "sdl_gamepad.h"
 void ImGUIStyle();
+template<class ValueArg>
+struct MinMax {
+  typedef ValueArg Value;
+  
+  Value min, max;
+  
+  MinMax(): min(0), max(0) {
+    
+  }
+  
+  void reset(Value const& v) {
+    this->min = this->max = v;
+  }
+  
+  MinMax& expand(Value const& v) {
+    if(v < this->min) {
+      this->min = v;
+    };
+    if(this->max < v) {
+      this->max = v;
+    };
+    
+    return *this;
+  }
+
+  MinMax& resetOrExpand(Value const& v, bool isReset) {
+    if(isReset) {
+      this->reset(v);
+    }
+    else {
+      this->expand(v);
+    }
+    
+    return *this;
+  }
+};
+
 
 #ifdef _WIN32
 int CALLBACK WinMain(
@@ -68,6 +105,18 @@ int main(int argc, char * argv[]){
     int count = 0;
     int show_controller[8] {0,0,0,0,0,0,0,0};
     ImGuiID child_id = 0;
+
+    MinMax<float> leftStickX;
+    MinMax<float> leftStickY;
+    MinMax<float> rightStickX;
+    MinMax<float> rightStickY;
+    
+    MinMax<float> leftShoulder;
+    MinMax<float> rightShoulder;
+    
+    const int statResetCounterMax = 30;
+    int statResetCounter = statResetCounterMax - 1;
+
 
     while (running){
         while (SDL_PollEvent(&event)){
@@ -137,6 +186,13 @@ int main(int argc, char * argv[]){
                       ImGui::Text(text);
                     }
                     ImGui::SameLine();
+                  }
+                  static char const* renderAnalog(char const* name, float v, MinMax<float> const& minMaxData) {
+                    static char buffer[100];
+                    
+                    sprintf(buffer, "%s: [%.3f .. %.3f .. %.3f]", name, minMaxData.min, v, minMaxData.max);
+                  
+                    return buffer;
                   }
                 };
 
@@ -235,18 +291,46 @@ int main(int argc, char * argv[]){
                 A::addBoolButton("Back", controller->state.Back);
                 A::addBoolButton("Guide", controller->state.Guide);
 
-
+                // Print the Axis values for the Sticks.
+                bool isStatReset = statResetCounterMax <= ++statResetCounter;
+                if(isStatReset) {
+                  statResetCounter = 0;
+                };
+                
+                leftStickX.resetOrExpand(controller->state.LeftStick.x, isStatReset);
+                leftStickY.resetOrExpand(controller->state.LeftStick.y, isStatReset);
+                rightStickX.resetOrExpand(controller->state.RightStick.x, isStatReset);
+                rightStickY.resetOrExpand(controller->state.RightStick.y, isStatReset);
+                
+                leftShoulder.resetOrExpand(controller->state.LeftTrigger, isStatReset);
+                rightShoulder.resetOrExpand(controller->state.RightTrigger, isStatReset);
+                
+                char buffer[200];
+                
                 ImGui::NewLine();
                 // Print the Axis values for the Triggers
                 ImGui::TextColored(color, "Left Trigger and Right Trigger");
-                ImGui::Text("Left Trigger: %.3f ,  Right Trigger: %.3f", controller->state.LeftTrigger, controller->state.RightTrigger);
-
+                buffer[0] = 0;
+                strcat(buffer, A::renderAnalog("Left Trigger", controller->state.LeftTrigger, leftShoulder));
+                strcat(buffer, ", ");
+                strcat(buffer, A::renderAnalog("Right Trigger", controller->state.RightTrigger, rightShoulder));
+                ImGui::Text("%s", buffer);
 
                 ImGui::NewLine();
-                // Print the Axis values for the Sticks.
                 ImGui::TextColored(color, "Left Stick and Right Stick");
-                ImGui::Text("Left Stick (x: %.3f ,  y: %.3f)", controller->state.LeftStick.x, controller->state.LeftStick.y);
-                ImGui::Text("Right Stick (x: %.3f ,  y: %.3f)", controller->state.RightStick.x, controller->state.RightStick.y);
+                buffer[0] = 0;
+                strcat(buffer, "Left Stick ");
+                strcat(buffer, A::renderAnalog("x", controller->state.LeftStick.x, leftStickX));
+                strcat(buffer, ", ");
+                strcat(buffer, A::renderAnalog("y", controller->state.LeftStick.y, leftStickY));
+                ImGui::Text("%s", buffer);
+                
+                buffer[0] = 0;
+                strcat(buffer, "Right Stick ");
+                strcat(buffer, A::renderAnalog("x", controller->state.RightStick.x, rightStickX));
+                strcat(buffer, ", ");
+                strcat(buffer, A::renderAnalog("y", controller->state.RightStick.y, rightStickY));
+                ImGui::Text("%s", buffer);
 
 
                 if (controller->sensorEnabled){
