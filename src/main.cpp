@@ -66,7 +66,7 @@ int main(int argc, char * argv[]){
 
     
     SDL_Window* window = SDL_CreateWindow("SDL Controller Visualizer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                                        1280, 720, SDL_WINDOW_SHOWN|SDL_WINDOW_RESIZABLE);
+                                        780, 700, SDL_WINDOW_SHOWN);
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
     SDL_Event event;
