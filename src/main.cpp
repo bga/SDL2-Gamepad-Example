@@ -201,60 +201,6 @@ int main(int argc, char * argv[]){
                 ImGui::Begin((controller->getName()+": #" + std::to_string(count)).c_str());
                 ImVec4 pressed = ImVec4(0.0, 1.0, 0.0, 1.0);
 
-                //Set Controller LED (If supported)
-                if (controller->hasLED()){
-                    std::vector<float> LED_Color = {float(controller->led_color.r) / float(255),
-                                                    float(controller->led_color.g) / float(255), 
-                                                    float(controller->led_color.b) / float(255), 
-                                                        1.0f};
-
-                    ImGui::ColorEdit3("LED Color", LED_Color.data());
-                    controller->led_color.r = LED_Color[0] * 255;
-                    controller->led_color.g = LED_Color[1] * 255;
-                    controller->led_color.b = LED_Color[2] * 255;
-
-                    controller->SetLED(controller->led_color.r, controller->led_color.g, controller->led_color.b);
-                }
-
-                ImGui::NewLine();
-                // Show number of touchpads if supported.
-                if (controller->getTouchpadCount()){
-                    ImGui::Text("Number of touchpads: %i", controller->getTouchpadCount());
-                }
-                
-                // Provide options to enable gyro and accelerometer.
-                if (controller->hasSensors()){
-                    controller->sensorEnabled = true;
-                    if (controller->hasGyroscope()){
-                        ImGui::Checkbox("Gyroscope", &controller->gyroActive);
-                        controller->setSensor(SDL_SENSOR_GYRO, (SDL_bool)controller->gyroActive);
-                    }
-                    if (controller->hasAccelerometer()){
-                        ImGui::Checkbox("Accelerometer", &controller->accelActive);
-                        controller->setSensor(SDL_SENSOR_ACCEL, (SDL_bool)controller->accelActive);
-                    }
-                }
-
-                if (controller->getTouchpadCount()){
-                    ImGui::Checkbox("Touchpad Polling", &controller->queryTouchpads);
-                }
-
-                // Allow controller rumble to be activated.
-                if (controller->hasHaptics()){
-                    ImGui::SliderFloat("Left Motor", &controller->vibration.motor_left, 0, 1, "%.3f", 1.0f);
-                    ImGui::SliderFloat("Right Motor", &controller->vibration.motor_right, 0, 1,"%.3f", 1.0f);
-                    controller->Rumble(controller->vibration.motor_left, controller->vibration.motor_right, 100);   
-                }
-
-                // Allow controller trigger rumble to be activated.
-                if (controller->hasTriggerHaptics()){
-                    ImGui::SliderFloat("Left Trigger Motor", &controller->vibration.trigger_left, 0, 1, "%.3f", 1.0f);
-                    ImGui::SliderFloat("Right Trigger Motor", &controller->vibration.trigger_right, 0, 1,"%.3f", 1.0f);
-                    controller->RumbleTriggers(controller->vibration.trigger_left, controller->vibration.trigger_right, 100);   
-                }
-
-
-                ImGui::NewLine();
                 // Print the face buttons, and color them if pressed.
                 // Using the class, to query buttons you check the state struct.
                 ImGui::TextColored(color, "Face Buttons");
@@ -389,6 +335,60 @@ int main(int argc, char * argv[]){
                         }
                    }
                 }
+                //Set Controller LED (If supported)
+                if (controller->hasLED()){
+                    std::vector<float> LED_Color = {float(controller->led_color.r) / float(255),
+                                                    float(controller->led_color.g) / float(255), 
+                                                    float(controller->led_color.b) / float(255), 
+                                                        1.0f};
+
+                    ImGui::ColorEdit3("LED Color", LED_Color.data());
+                    controller->led_color.r = LED_Color[0] * 255;
+                    controller->led_color.g = LED_Color[1] * 255;
+                    controller->led_color.b = LED_Color[2] * 255;
+
+                    controller->SetLED(controller->led_color.r, controller->led_color.g, controller->led_color.b);
+                }
+
+                ImGui::NewLine();
+                // Show number of touchpads if supported.
+                if (controller->getTouchpadCount()){
+                    ImGui::Text("Number of touchpads: %i", controller->getTouchpadCount());
+                }
+                
+                // Provide options to enable gyro and accelerometer.
+                if (controller->hasSensors()){
+                    controller->sensorEnabled = true;
+                    if (controller->hasGyroscope()){
+                        ImGui::Checkbox("Gyroscope", &controller->gyroActive);
+                        controller->setSensor(SDL_SENSOR_GYRO, (SDL_bool)controller->gyroActive);
+                    }
+                    if (controller->hasAccelerometer()){
+                        ImGui::Checkbox("Accelerometer", &controller->accelActive);
+                        controller->setSensor(SDL_SENSOR_ACCEL, (SDL_bool)controller->accelActive);
+                    }
+                }
+
+                if (controller->getTouchpadCount()){
+                    ImGui::Checkbox("Touchpad Polling", &controller->queryTouchpads);
+                }
+
+                ImGui::NewLine();
+                
+                 // Allow controller rumble to be activated.
+                if (controller->hasHaptics()){
+                    ImGui::SliderFloat("Left Motor", &controller->vibration.motor_left, 0, 1, "%.3f", 1.0f);
+                    ImGui::SliderFloat("Right Motor", &controller->vibration.motor_right, 0, 1,"%.3f", 1.0f);
+                    controller->Rumble(controller->vibration.motor_left, controller->vibration.motor_right, 100);   
+                }
+
+                // Allow controller trigger rumble to be activated.
+                if (controller->hasTriggerHaptics()){
+                    ImGui::SliderFloat("Left Trigger Motor", &controller->vibration.trigger_left, 0, 1, "%.3f", 1.0f);
+                    ImGui::SliderFloat("Right Trigger Motor", &controller->vibration.trigger_right, 0, 1,"%.3f", 1.0f);
+                    controller->RumbleTriggers(controller->vibration.trigger_left, controller->vibration.trigger_right, 100);   
+                }
+
                 ImGui::End();
             }
             
