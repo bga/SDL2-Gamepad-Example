@@ -394,10 +394,9 @@ int main(int argc, char * argv[]){
             
             
         }
+
+        ImGui::SetNextWindowPos({ 10, 10 });
         ImGui::Begin("SDL Game Controller Test/Example App");
-        ImGui::Text("This is an application that tests the controllers you have on your system, using SDL2 with a custom class. \nThis serves to also be an example of using SDL2 with controller support.");
-        ImGui::NewLine();
-        ImGui::Text("Number of Controllers: %i", Gamepads.size());
         for (int i = 0; i < Gamepads.size(); i++ ){
             if (ImGui::Button((Gamepads[i]->getName()+" (Index: "+ std::to_string(i) +")").c_str())){
                 if (show_controller[i]){
@@ -407,6 +406,7 @@ int main(int argc, char * argv[]){
                     show_controller[i] = true;
                 }
             }
+            ImGui::SameLine();
         }
         ImGui::End();
         ImGui::EndFrame();
