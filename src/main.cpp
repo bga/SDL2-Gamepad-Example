@@ -399,6 +399,7 @@ int main(int argc, char * argv[]){
         }
 
         ImGui::SetNextWindowPos({ 10, 10 });
+        ImGui::SetNextWindowSize({780 - 10 - 10 , 140 });
         ImGui::Begin("SDL Game Controller Test/Example App");
         for (int i = 0; i < Gamepads.size(); i++ ){
             if (ImGui::Button((Gamepads[i]->getName()+" (Index: "+ std::to_string(i) +")").c_str())){
