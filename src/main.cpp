@@ -3,6 +3,7 @@
   #include <windows.h>
 #endif
 
+#include <unistd.h>
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl_renderer.h"
 #include "imgui/imgui_impl_sdl.h"
@@ -416,6 +417,8 @@ int main(int argc, char * argv[]){
         SDL_RenderClear(renderer);
         ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
         SDL_RenderPresent(renderer);
+
+        usleep(1000 / 30);
     }
 
 
