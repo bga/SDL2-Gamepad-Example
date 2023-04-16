@@ -198,8 +198,11 @@ int main(int argc, char * argv[]){
                 };
 
                 
-                ImGui::Begin((controller->getName()+": #" + std::to_string(count)).c_str());
-                ImVec4 pressed = ImVec4(0.0, 1.0, 0.0, 1.0);
+                ImGui::SetNextWindowCollapsed(false);
+                ImGui::SetNextWindowFocus();
+                ImGui::SetNextWindowPos({ 10, 140 });
+                ImGui::SetNextWindowSize({780 - 10 - 10 , 700 - 140 - 10 });
+                ImGui::Begin((controller->getName()+": #" + std::to_string(count)).c_str(), nullptr,  ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse);
 
                 // Print the face buttons, and color them if pressed.
                 // Using the class, to query buttons you check the state struct.
