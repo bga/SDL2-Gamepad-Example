@@ -422,7 +422,7 @@ int main(int argc, char * argv[]){
         ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
         SDL_RenderPresent(renderer);
 
-        usleep(1000 / 30);
+        usleep(1000 * 1000 / 30);
     }
 
 
